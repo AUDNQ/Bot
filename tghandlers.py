@@ -10,7 +10,7 @@ from pymax import Client, ClientRouter, Message
 from aiogram.fsm.context import FSMContext
 from data import RegMaxState
 load_dotenv()
-TgId = os.getenv("TgId")
+TgId = int(os.getenv("TgId"))
 
 router = Router()
 
@@ -20,7 +20,7 @@ async def handler_start(sms: Message):
         await sms.answer("Бот не прендназначен для групп")
         return
     if sms.from_user.id == TgId and not Client.is_authorized:
-        await sms.amswer("Этот бот является мостом между Telegram и Max, для регистрации аккаунта Max напишите команду /reg, или /help.")
+        await sms.answer("Этот бот является мостом между Telegram и Max, для регистрации аккаунта Max напишите команду /reg, или /help.")
 
 
 @router.message(Command("help"))
@@ -65,7 +65,7 @@ async def code_state(sms: Message, state: FSMContext):
         )
 
         await client.start()
-        await state.clear
+        await state.clear()
     except Exception:
         await sms.answer("Скорее всего вы ввели не верный пароль, попробуйте всю процедуру еще раз.")
 
